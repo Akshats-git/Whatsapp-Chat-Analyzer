@@ -2,6 +2,12 @@ import streamlit as st
 from src.preprocess import preprocess_chat
 from src import utilities
 
+st.set_page_config(
+    page_title="WhatsApp Chat Analyzer",
+    page_icon="",
+    layout="wide"
+)
+
 st.sidebar.title("Whatsapp Chat Analyzer")
 
 uploaded_file = st.sidebar.file_uploader("Choose a file")
@@ -26,7 +32,7 @@ if uploaded_file is not None:
 
     if st.sidebar.button("Show Analysis"):
 
-        num_messages, num_words, num_media_messages = utilities.fetch_stats(selected_user, df)
+        num_messages, num_words, num_media_messages, num_links = utilities.fetch_stats(selected_user, df)
         
         col1, col2, col3, col4 = st.columns(4)
 
@@ -44,3 +50,8 @@ if uploaded_file is not None:
         with col3:
             st.header("Total Media Messages")
             st.title(num_media_messages)
+
+        # Displaying the total number of links shared in the fourth column
+        with col4:
+            st.header("Total Links Shared")
+            st.title(num_links)
