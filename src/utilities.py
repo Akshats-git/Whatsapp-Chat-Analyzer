@@ -1,5 +1,6 @@
 from urlextract import URLExtract
 import matplotlib.pyplot as plt
+from wordcloud import WordCloud
 
 def fetch_stats(selected_user, df):
 
@@ -34,6 +35,20 @@ def most_busy_users(df):
 
     # Fetching the percentage of messages sent by each user
     df = round((df['user'].value_counts() / df.shape[0]) * 100, 2).reset_index().rename(columns={'index': 'name', 'user': 'percent'})
-    
+
     return x, df
+
+
+def create_wordcloud(selected_user, df):
+
+    if selected_user != "Group":
+        df = df[df['user'] == selected_user]
+
+    temp = df[df['message'] != '<Media omitted>\n']
+    temp = temp[temp['message'] != 'This message was deleted\n']
+
+    wc = WordCloud(width=400, height=400, min_font_size=10, background_color='white')
+    df_wc = wc.generate(temp['message'].str.cat(sep=" "))
+
+    return df_wc
 
