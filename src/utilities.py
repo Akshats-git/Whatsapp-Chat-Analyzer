@@ -1,4 +1,5 @@
 from urlextract import URLExtract
+import matplotlib.pyplot as plt
 
 def fetch_stats(selected_user, df):
 
@@ -25,4 +26,14 @@ def fetch_stats(selected_user, df):
     num_links = len(links)
 
     return num_messages, num_words, num_media_messages, num_links
+
+
+def most_busy_users(df):
+    # Fetching the most active users in a group
+    x = df['user'].value_counts().head()
+
+    # Fetching the percentage of messages sent by each user
+    df = round((df['user'].value_counts() / df.shape[0]) * 100, 2).reset_index().rename(columns={'index': 'name', 'user': 'percent'})
+    
+    return x, df
 

@@ -1,6 +1,7 @@
 import streamlit as st
 from src.preprocess import preprocess_chat
 from src import utilities
+import matplotlib.pyplot as plt
 
 st.set_page_config(
     page_title="WhatsApp Chat Analyzer",
@@ -32,8 +33,8 @@ if uploaded_file is not None:
 
     if st.sidebar.button("Show Analysis"):
 
+        # Fetching the stats    
         num_messages, num_words, num_media_messages, num_links = utilities.fetch_stats(selected_user, df)
-        
         col1, col2, col3, col4 = st.columns(4)
 
         # Displaying the total number of messages in the first column
@@ -55,3 +56,18 @@ if uploaded_file is not None:
         with col4:
             st.header("Total Links Shared")
             st.title(num_links)
+
+        # Finding the most active users in a group
+        if selected_user == "Group":
+            st.title("Most Active Users")
+            x, new_df = utilities.most_busy_users(df)
+            fig, ax = plt.subplots()
+            col1, col2 = st.columns(2)
+
+            with col1:
+                ax.bar(x.index, x.values, color='lightgreen')
+                plt.xticks(rotation='vertical')
+                st.pyplot(fig)
+
+            with col2:
+                st.dataframe(new_df)
