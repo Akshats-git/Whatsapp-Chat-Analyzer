@@ -46,6 +46,24 @@ def create_wordcloud(selected_user, df):
     if selected_user != "Group":
         df = df[df['user'] == selected_user]
 
+    f = open('data/stop_words.txt', 'r')
+    stop_words = f.read()
+    
+    # Removing certain system messages
+    temp = df[df['message'] != '<Media omitted>\n']
+    temp = temp[temp['message'] != 'This message was deleted\n']
+    temp = temp[temp['message'] != 'group_notification']
+
+    # Removing emojis from the messages
+    temp['message'] = temp['message'].apply(lambda x: x.encode('ascii', 'ignore').decode('ascii'))
+
+    # Filtering out the stop words from the messages and finding the most common words
+    words = []
+    for message in temp['message']:
+        for word in message.lower().split():
+            if word not in stop_words:
+                words.append(word)
+
     temp = df[df['message'] != '<Media omitted>\n']
     temp = temp[temp['message'] != 'This message was deleted\n']
 
