@@ -1,6 +1,8 @@
 from urlextract import URLExtract
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
+from collections import Counter
+import pandas as pd
 
 def fetch_stats(selected_user, df):
 
@@ -51,4 +53,31 @@ def create_wordcloud(selected_user, df):
     df_wc = wc.generate(temp['message'].str.cat(sep=" "))
 
     return df_wc
+
+
+def most_common_words(selected_user, df):
+
+    f = open('data/stop_words.txt', 'r')
+    stop_words = f.read()
+
+    if selected_user != "Group":
+        df = df[df['user'] == selected_user]
+
+    # Removing certain system messages
+    temp = df[df['message'] != '<Media omitted>\n']
+    temp = temp[temp['message'] != 'This message was deleted\n']
+    temp = temp[temp['message'] != 'group_notification']
+
+    # Removing emojis from the messages
+    temp['message'] = temp['message'].apply(lambda x: x.encode('ascii', 'ignore').decode('ascii'))
+
+    # Filtering out the stop words from the messages and finding the most common words
+    words = []
+    for message in temp['message']:
+        for word in message.lower().split():
+            if word not in stop_words:
+                words.append(word)
+
+    most_common_df = pd.DataFrame(Counter(words).most_common(20))
+    return most_common_df
 
