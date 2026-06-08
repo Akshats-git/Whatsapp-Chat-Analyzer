@@ -75,6 +75,27 @@ if uploaded_file is not None:
         plt.xticks(rotation='vertical')
         st.pyplot(fig)
 
+
+        # Activity Map
+        st.title("Activity Map")
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.header("Weekly")
+            busy_day = utilities.weekly_activity_map(selected_user, df)
+            fig, ax = plt.subplots()
+            ax.bar(busy_day.index, busy_day.values, color='orange')
+            plt.xticks(rotation='vertical')
+            st.pyplot(fig)
+        
+        with col2:
+            st.header("Monthly")
+            busy_month = utilities.monthly_activity_map(selected_user, df)
+            fig, ax = plt.subplots()
+            ax.bar(busy_month.index, busy_month.values, color='purple')
+            plt.xticks(rotation='vertical')
+            st.pyplot(fig)
+
         # Finding the most active users in a group
         if selected_user == "Group":
             st.title("Most Active Users")

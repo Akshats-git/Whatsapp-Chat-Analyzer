@@ -147,3 +147,42 @@ def daily_timeline(selected_user, df):
 
     return daily_timeline
 
+
+def weekly_activity_map(selected_user, df):
+    if selected_user != "Group":
+        df = df[df['user'] == selected_user]
+
+    order = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
+    ]
+
+    return df['day_name'].value_counts().reindex(order)
+
+
+def monthly_activity_map(selected_user, df):
+    if selected_user != "Group":
+        df = df[df['user'] == selected_user]
+
+    order = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+    ]
+
+    return df['month'].value_counts().reindex(order)
+
