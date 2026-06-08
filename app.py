@@ -2,6 +2,7 @@ import streamlit as st
 from src.preprocess import preprocess_chat
 from src import utilities
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 st.set_page_config(
     page_title="WhatsApp Chat Analyzer",
@@ -86,3 +87,21 @@ if uploaded_file is not None:
         ax.barh(most_common_df[0], most_common_df[1], color='pink')
         # plt.xticks(rotation='vertical')
         st.pyplot(fig)
+
+        # Emoji Analysis
+        st.title("Emoji Analysis")
+        emoji_df = utilities.emoji_stats(selected_user, df)
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.dataframe(emoji_df)
+        with col2:
+            fig = px.pie(
+                emoji_df.head(10),
+                values='count',
+                names='emoji',
+                title='Top Emojis'
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+            
