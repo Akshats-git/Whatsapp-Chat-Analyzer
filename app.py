@@ -35,6 +35,7 @@ if uploaded_file is not None:
     if st.sidebar.button("Show Analysis"):
 
         # Fetching the stats    
+        st.header("Top Statistics")
         num_messages, num_words, num_media_messages, num_links = utilities.fetch_stats(selected_user, df)
         col1, col2, col3, col4 = st.columns(4)
 
@@ -57,6 +58,14 @@ if uploaded_file is not None:
         with col4:
             st.header("Total Links Shared")
             st.title(num_links)
+
+        # Monthly Timeline
+        st.title("Monthly Timeline")
+        timeline = utilities.monthly_timeline(selected_user, df)
+        fig, ax = plt.subplots()
+        ax.plot(timeline['time'], timeline['message'], color='green')
+        plt.xticks(rotation='vertical')
+        st.pyplot(fig)
 
         # Finding the most active users in a group
         if selected_user == "Group":
@@ -102,6 +111,8 @@ if uploaded_file is not None:
                 names='emoji',
                 title='Top Emojis'
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
+
+        
 
             

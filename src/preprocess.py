@@ -35,6 +35,7 @@ def preprocess_chat(chat):
     # Extracting year, month, day, hour, and minute from the date column
     df['year'] = df['date'].dt.year
     df['month'] = df['date'].dt.month_name()
+    df['month_num'] = df['date'].dt.month
     df['day'] = df['date'].dt.day
     df['hour'] = df['date'].dt.hour
     df['minute'] = df['date'].dt.minute
