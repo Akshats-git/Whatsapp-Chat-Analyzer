@@ -3,6 +3,7 @@ from src.preprocess import preprocess_chat
 from src import utilities
 import matplotlib.pyplot as plt
 import plotly.express as px
+import seaborn as sns
 
 st.set_page_config(
     page_title="WhatsApp Chat Analyzer",
@@ -75,7 +76,6 @@ if uploaded_file is not None:
         plt.xticks(rotation='vertical')
         st.pyplot(fig)
 
-
         # Activity Map
         st.title("Activity Map")
         col1, col2 = st.columns(2)
@@ -95,6 +95,15 @@ if uploaded_file is not None:
             ax.bar(busy_month.index, busy_month.values, color='purple')
             plt.xticks(rotation='vertical')
             st.pyplot(fig)
+
+        # User Activity Heatmap
+        st.title("User Activity Heatmap")
+        user_heatmap = utilities.activity_heatmap(selected_user, df)
+        fig, ax = plt.subplots()
+        sns.heatmap(user_heatmap, cmap='YlGnBu')
+        ax.set_xlabel("Hour of Day")
+        ax.set_ylabel("Day of Week")
+        st.pyplot(fig)
 
         # Finding the most active users in a group
         if selected_user == "Group":

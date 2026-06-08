@@ -186,3 +186,37 @@ def monthly_activity_map(selected_user, df):
 
     return df['month'].value_counts().reindex(order)
 
+
+def activity_heatmap(selected_user, df):
+    if selected_user != "Group":
+        df = df[df['user'] == selected_user]
+
+    user_heatmap = df.pivot_table(
+        index='day_name',
+        columns='period',
+        values='message',
+        aggfunc='count'
+    ).fillna(0)
+
+    # Sort weekdays
+    day_order = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
+    ]
+
+    # Sort time periods
+    period_order = sorted(
+        user_heatmap.columns,
+        key=lambda x: int(str(x).split('-')[0])
+    )
+
+    user_heatmap = user_heatmap.reindex(day_order)
+    user_heatmap = user_heatmap[period_order]
+
+    return user_heatmap
+
