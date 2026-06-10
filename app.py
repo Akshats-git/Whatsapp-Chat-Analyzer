@@ -22,7 +22,7 @@ if uploaded_file is not None:
     data = bytes_data.decode("utf-8")
 
     df = preprocess_chat(data)
-    st.dataframe(df)
+    # st.dataframe(df)
 
     # fetching unique users and sorting them
     user_list = df['user'].unique().tolist()
